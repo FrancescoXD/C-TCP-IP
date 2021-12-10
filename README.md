@@ -20,3 +20,10 @@ A socket is an abstraction through which an application may send and receive dat
 The main types of sockets in TCP/IP are stream sockets and datagram sockets.
 
 A TCP/IP socket is identifieed by an IP, an end-to-end protocol (TCP or UDP) and a port.
+
+## Basic TCP Sockets
+Typical TCP client's communication:
+- Create a TCP socket using socket()
+- Establish a connection using connect()
+- Communicate using send() and recv()
+- Close the connection with close()
