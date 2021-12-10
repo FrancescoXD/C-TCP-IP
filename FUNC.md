@@ -11,6 +11,8 @@ ntohl() -> network to host long
 
 ## structs
 
+### struct addrinfo
+
 ```
 struct addrinfo {
 	int		ai_flags; //AI_PASSIVE, AI_CANONNAME
@@ -22,7 +24,7 @@ struct addrinfo {
 	char		*ai_canonname; //full canonical hostname
 
 	struct addrinfo *ai_next; //linked list to next node
-}
+};
 ```
 
 `AF_INET` -> IPv4  
@@ -35,8 +37,31 @@ struct addrinfo {
 struct sockaddr {
 	unsigned short	sa_family; //AF_xxx
 	char		sa_data[14];
-}
+};
 ```
+
+### struct sockaddr_in
 
 To deal with `struct sockaddr` programmers created a `struct sockaddr_in` ("in" for "Internet") to be used with IPv4.
 A pointer to `struct sockaddr_in` can be casted to `struct sockaddr`. So when we call `connect()` it wants a `struct sockaddr*`, so we cast it.
+
+```
+struct sockaddr_in {
+	short int		sin_family
+	unsigned short int	sin_port
+	struct in_addr		sin_addr
+	unsigned char		sin_zero[8];
+};
+```
+
+This structure make easy to reference elements of the socket address. `sin_zero` should be set to zero with `memset()`. Notice that `sin_family` corresponds to `sa_family` in `struct sockaddr` and should be set to `AF_INET`. Finally the `sin_port` must be `Network Byte Order` using `htons()` (host to network short).
+
+Note that the `sin_addr` refers to an union.
+
+```
+struct in_addr {
+	uint32_t	s_addr;
+};
+```
+
+This stands for Internet Address, and is a strucutre for historical reasons.
