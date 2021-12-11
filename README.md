@@ -19,7 +19,7 @@ A socket is an abstraction through which an application may send and receive dat
 
 The main types of sockets in TCP/IP are stream sockets and datagram sockets.
 
-A TCP/IP socket is identifieed by an IP, an end-to-end protocol (TCP or UDP) and a port.
+A TCP/IP socket is identified by an IP, an end-to-end protocol (TCP or UDP) and a port.
 
 ## Basic TCP Sockets
 Typical TCP client's communication:
