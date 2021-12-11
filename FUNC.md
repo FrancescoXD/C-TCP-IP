@@ -64,4 +64,4 @@ struct in_addr {
 };
 ```
 
-This stands for Internet Address, and is a strucutre for historical reasons.
+This stands for Internet Address, and is a structure for historical reasons.
