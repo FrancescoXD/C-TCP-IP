@@ -62,7 +62,7 @@ Best way to initialize a struct:
 struct addrinfo hints = {
 	.ai_family = AF_UNSPEC,
 	.ai_socktype = SOCK_STREAM,
-	.ai_flags = AI_PASSIVE // use my IP
+	.ai_flags = AI_PASSIVE //use my IP
 };
 ```
 ___
