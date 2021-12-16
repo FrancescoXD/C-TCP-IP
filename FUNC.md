@@ -55,7 +55,17 @@ struct sockaddr_in {
 ```
 
 This structure make easy to reference elements of the socket address. `sin_zero` should be set to zero with `memset()`. Notice that `sin_family` corresponds to `sa_family` in `struct sockaddr` and should be set to `AF_INET`. Finally the `sin_port` must be `Network Byte Order` using `htons()` (host to network short).
-
+___
+EDIT on `memset()`: https://www.anmolsarma.in/post/stop-struct-memset/  
+Best way to initialize a struct:
+```
+struct addrinfo hints = {
+	.ai_family = AF_UNSPEC,
+	.ai_socktype = SOCK_STREAM,
+	.ai_flags = AI_PASSIVE // use my IP
+};
+```
+___
 Note that the `sin_addr` refers to an union.
 
 ```
