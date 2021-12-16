@@ -60,9 +60,9 @@ EDIT on `memset()`: https://www.anmolsarma.in/post/stop-struct-memset/
 Best way to initialize a struct:
 ```
 struct addrinfo hints = {
-	.ai_family = AF_UNSPEC,
-	.ai_socktype = SOCK_STREAM,
-	.ai_flags = AI_PASSIVE //use my IP
+	.ai_family		= AF_UNSPEC,
+	.ai_socktype 	= SOCK_STREAM,
+	.ai_flags 		= AI_PASSIVE //use my IP
 };
 ```
 
@@ -75,3 +75,39 @@ struct in_addr {
 ```
 
 This stands for Internet Address, and is a structure for historical reasons.
+___
+What's about IPv6? There is `sockaddr_in6`:
+```
+struct sockaddr_in6 {
+	u_int16_t		sin6_family; //address
+	u_int16_t		sin6_port;
+	u_int16_t		sin6_flowinfo;
+	struct in6_addr	sin6_addr;
+	u_int32_t		sin6_scope_id;
+};
+
+struct in6_addr {
+	unsigned char	s6_addr[16]; //IPv6 address
+};
+```
+There is also a `struct sockaddr_storage` that hold both IPv4 and IPv6 structures.
+```
+struct sockaddr_storage {
+	sa_family_t	ss_family;
+	char		__ss_pad1[_SS_PAD1SIZE];
+	int64_t		__ss_align;
+	char		__ss_pad2[_SS_PAD2SIZE];
+};
+```
+___
+## IP Addresses
+We can use `inet_pton()` that converts an IP address from text to binary form.
+```
+struct sockaddr_in sa;
+struct sockaddr_in6 sa6;
+
+inet_pton(AF_INET, "10.12.110.57", &(sa.sin_addr)); //IPv4
+inet_pton(AF_INET6, "2001:db8:63b3:1::3490", &(sa6.sin6_addr)); //IPv6
+```
+`inet_pton()` returns 1 on success, 0 when src doesn't contain a valid network address and -1 when it fails.
+___
