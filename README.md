@@ -1,4 +1,9 @@
 # TPC/IP in C Notes
+
+### References
+* [Beej's Guide to Network Programming](http://www.beej.us/guide/bgnet/)
+* TCP/IP Sockets in C: Practical Guide for Programmers (Morgan Kaufmann Practical Guides) 2nd Edition
+
 ## What's a communication channel?
 A communication channel is a sequence of bytes from one host to another.
 
