@@ -9,9 +9,9 @@ ntohs() -> network to host short
 ntohl() -> network to host long
 ```
 
-## structs
+## Structures
 
-### struct addrinfo
+### > struct addrinfo
 
 ```
 struct addrinfo {
@@ -39,8 +39,8 @@ struct sockaddr {
 	char		sa_data[14];
 };
 ```
-
-### struct sockaddr_in
+___
+### > struct sockaddr_in
 
 To deal with `struct sockaddr` programmers created a `struct sockaddr_in` ("in" for "Internet") to be used with IPv4.
 A pointer to `struct sockaddr_in` can be casted to `struct sockaddr`. So when we call `connect()` it wants a `struct sockaddr*`, so we cast it.
@@ -55,7 +55,7 @@ struct sockaddr_in {
 ```
 
 This structure make easy to reference elements of the socket address. `sin_zero` should be set to zero with `memset()`. Notice that `sin_family` corresponds to `sa_family` in `struct sockaddr` and should be set to `AF_INET`. Finally the `sin_port` must be `Network Byte Order` using `htons()` (host to network short).
-___
+
 EDIT on `memset()`: https://www.anmolsarma.in/post/stop-struct-memset/  
 Best way to initialize a struct:
 ```
@@ -65,7 +65,7 @@ struct addrinfo hints = {
 	.ai_flags = AI_PASSIVE //use my IP
 };
 ```
-___
+
 Note that the `sin_addr` refers to an union.
 
 ```
