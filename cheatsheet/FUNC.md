@@ -189,7 +189,7 @@ const char *inet_ntop(int af,
 
 ___
 
-### INET_ADDRSTRLEN and INET6_ADDRSTRLEN
+## INET_ADDRSTRLEN and INET6_ADDRSTRLEN
 
 `INET_ADDRSTRLEN` is a macro that defines the length of an ipv4 address.  
 `INET6_ADDRSTRLEN` is a macro that defines the length of an ipv6 address.  
