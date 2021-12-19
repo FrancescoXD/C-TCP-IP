@@ -27,7 +27,7 @@ int main(void) {
 	// accept()
 	
 	if ((status = getaddrinfo(NULL, "3939", &hints, &res)) != 0) {
-		fprintf(stderr, "error on getaddrinfo()");
+		fprintf(stderr, "error on getaddrinfo()\n");
 		exit(1);
 	}
 	
@@ -36,22 +36,22 @@ int main(void) {
 	// loop through all the results and bind the first we can
 	for (p = res; p != NULL; p = p->ai_next) {
 		if ((sockfd = socket(p->ai_family, p->ai_socktype, p->ai_protocol)) == -1) {
-			fprintf(stderr, "error on socket(): %s", strerror(errno));
+			fprintf(stderr, "error on socket(): %s\n", strerror(errno));
 			continue;
 		}
 		
 		if (bind(sockfd, p->ai_addr, p->ai_addrlen) != 0) {
-			fprintf(stderr, "error on bind(): %s", strerror(errno));
+			fprintf(stderr, "error on bind(): %s\n", strerror(errno));
 			continue;
 		}
 		
 		break;
 	}
 	
-	freeaddrinfo(res); // we don't need the result anymore
+	freeaddrinfo(res); // we don't need the results anymore
 	
 	if (listen(sockfd, 5) == -1) {
-		fprintf(stderr, "error on listen()");
+		fprintf(stderr, "error on listen()\n");
 		exit(1);
 	}
 	
@@ -64,7 +64,7 @@ int main(void) {
 		socklen_t addr_size = sizeof their_addr;
 		new_fd = accept(sockfd, (struct sockaddr *)&their_addr, &addr_size); // accept the new client
 		if (new_fd == -1) {
-			fprintf(stderr, "error on accept");
+			fprintf(stderr, "error on accept\n");
 			continue;
 		}
 		
@@ -73,7 +73,7 @@ int main(void) {
 		
 		if (!fork()) {
 			close(sockfd);
-			char *msg = "Hello Client! I am the server!";
+			char *msg = "Hello Client! I am the server!\n";
 			int len = strlen(msg);
 			if (send(new_fd, msg, len, 0) == -1) {
 				fprintf(stderr, "error: %s", strerror(errno));

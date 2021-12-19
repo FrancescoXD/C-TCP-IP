@@ -45,7 +45,7 @@ int main(void) {
 	char buff[BUFF_SIZE];
 	int recv_bytes;
 	if((recv_bytes = recv(sockfd, buff, BUFF_SIZE - 1, 0)) == -1) {
-		fprintf(stderr, "error on recv(): %s", strerror(errno));
+		fprintf(stderr, "error on recv(): %s\n", strerror(errno));
 		exit(1);
 	};
 	buff[recv_bytes] = '\0';
