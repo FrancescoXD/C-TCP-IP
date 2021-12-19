@@ -15,13 +15,13 @@ ntohl() -> network to host long
 
 ```
 struct addrinfo {
-	int				ai_flags; //AI_PASSIVE, AI_CANONNAME
-	int				ai_family; //AF_INET, AF_INET6, AF_UNSPEC
-	int				ai_socktype; //SOCK_STREAM, SOCK_DGRAM
-	int				ai_protocol; //0 for "any"
-	size_t			ai_addrlen; //size of ai_addr in bytes
+	int		ai_flags; //AI_PASSIVE, AI_CANONNAME
+	int		ai_family; //AF_INET, AF_INET6, AF_UNSPEC
+	int		ai_socktype; //SOCK_STREAM, SOCK_DGRAM
+	int		ai_protocol; //0 for "any"
+	size_t		ai_addrlen; //size of ai_addr in bytes
 	struct sockaddr	*ai_addr; //sockaddr_in or sockaddr_in6
-	char			*ai_canonname; //full canonical hostname
+	char		*ai_canonname; //full canonical hostname
 
 	struct addrinfo *ai_next; //linked list to next node
 };
@@ -48,7 +48,7 @@ A pointer to `struct sockaddr_in` can be casted to `struct sockaddr`. So when we
 
 ```
 struct sockaddr_in {
-	short int			sin_family
+	short int		sin_family
 	unsigned short int	sin_port
 	struct in_addr		sin_addr
 	unsigned char		sin_zero[8];
@@ -62,9 +62,9 @@ Best way to initialize a struct:
 
 ```
 struct addrinfo hints = {
-	.ai_family		= AF_UNSPEC,
+	.ai_family	= AF_UNSPEC,
 	.ai_socktype 	= SOCK_STREAM,
-	.ai_flags 		= AI_PASSIVE //use my IP
+	.ai_flags 	= AI_PASSIVE //use my IP
 };
 ```
 
@@ -84,11 +84,11 @@ What's about IPv6? There is `sockaddr_in6`:
 
 ```
 struct sockaddr_in6 {
-	u_int16_t		sin6_family; //address
-	u_int16_t		sin6_port;
-	u_int16_t		sin6_flowinfo;
+	u_int16_t	sin6_family; //address
+	u_int16_t	sin6_port;
+	u_int16_t	sin6_flowinfo;
 	struct in6_addr	sin6_addr;
-	u_int32_t		sin6_scope_id;
+	u_int32_t	sin6_scope_id;
 };
 
 struct in6_addr {
@@ -135,9 +135,9 @@ This function helps to setup the structs we need.
 #include <netdb.h>
 
 int getaddrinfo(const char *node,
-				const char *service,
-				const struct addrinfo *hints,
-				struct addrinfo **res);
+		const char *service,
+		const struct addrinfo *hints,
+		struct addrinfo **res);
 ```
 
 `const char *node` is the hostname or an IP address.  
@@ -177,9 +177,9 @@ This function converts a network address struct to a string.
 #include <arpa/inet.h>
 
 const char *inet_ntop(int af,
-					  const void *src,
-					  char *dst,
-					  socklen_t size);
+			const void *src,
+			char *dst,
+			socklen_t size);
 ```
 
 `int af` is the family (AF_INET, AF_INET6) that we get from the struct.  
