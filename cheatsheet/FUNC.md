@@ -27,9 +27,9 @@ struct addrinfo {
 };
 ```
 
-`AF_INET`		-> IPv4  
-`AF_INET6`		-> IPv6  
-`AF_UNSPEC`		-> use IPv4 or IPv6  
+`AF_INET`	-> IPv4  
+`AF_INET6`	-> IPv6  
+`AF_UNSPEC`	-> use IPv4 or IPv6  
 `SOCK_STREAM`	-> TCP  
 `SOCK_DGRAM`	-> UDP  
 
