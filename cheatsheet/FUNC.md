@@ -198,3 +198,76 @@ Explainings:
 `INET_ADDRSTRLEN` is defined as 16 because it needs 15 bytes to represent an ipv4 address (255.255.255.255).  
 `INET6_ADDRSTRLEN` is defined as 46 because with ipv4 tunneling the longest form can be 45 bytes (the standard is 39 bytes), for example: ffff:ffff:ffff:ffff:ffff:ffff:255.255.255.255.  
 The last byte is the string null terminator \0.
+
+___
+
+## > socket()
+
+This functions returns a socket descriptor (-1 on error).
+
+```
+#include <sys/types.h>
+#include <sys/socket.h>
+
+int socket(int domain,
+		int type,
+		int protocol);
+```
+
+`int domain` is the domain, like: `PF_INET` or `PF_INET6`. PF stands for Protocol Family. It's related to `sin_family` and sometimes we can see that developers use `AF_INET`, but it's better PF.  
+`int type` is `SOCK_STREAM` or `SOCK_DGRAM`.  
+`int protocol` we can set it to 0 and the protocol is choosen looking to the type.
+
+Example:
+
+```
+int sock, status;
+struct addrinfo *res, hints;
+
+if ((status = getaddrinfo("google.com", "http", &hints, &res)) != 0) {
+	fprintf(stderr, "error while getting getaddrinfo()");
+	exit(1);
+}
+
+sock = socket(res->ai_family, res->ai_socktype, res->ai_protocol);
+```
+
+___
+
+## > bind()
+
+This functions bind a socket on a port. Returns -1 on error.
+
+```
+#include <sys/types.h>
+#include <sys/socket.h>
+
+int bind(int sockfd,
+	struct sockaddr *my_addr,
+	int addrlen);
+```
+
+`int sockfd` is the socket file descriptor made by `socket()`.  
+`struct sockaddr *my_addr` is the struct that contains information about our address.  
+`int addrlen` is the length of address in bytes.
+
+Example:
+
+```
+struct sockaddr hints = {
+	.ai_family = AF_UNSPEC,
+	.ai_socktype = SOCK_STREAM,
+	.ai_flags = AI_PASSIVE
+};
+struct sockaddr *res;
+int sockfd, status;
+
+if ((status = getaddrinfo(NULL, "3490", &hints, &res)) != 0) {
+	fprintf(stderr, "error in getaddrinfo()");
+	exit(1);
+}
+
+sockfd = socket(res->ai_family, res->ai_socktype, res->ai_protocol);
+
+bind(sockfd, res->ai_addr, res->ai_addrlen);
+```
