@@ -10,7 +10,10 @@
 #include <string.h>
 
 int main(void) {
-	struct addrinfo hints;		// our struct with needed infos
+	struct addrinfo hints = {	// our struct with needed informations
+		.ai_family = AF_UNSPEC,
+		.ai_socktype = SOCK_STREAM
+	};
 	struct addrinfo *res;		// linked-list result
 	struct addrinfo *p;		// our iterate variable
 	int status;			// getaddrinfo() result
@@ -21,9 +24,7 @@ int main(void) {
 	// INET6_ADDRSTRLEN is defined as 46 because with ipv4 tunneling the longest form can be 45 bytes (the standard is 39 bytes), for example: ffff:ffff:ffff:ffff:ffff:ffff:255.255.255.255
 	// the last byte is the string null terminator \0
 
-	memset(&hints, 0, sizeof hints);
-	hints.ai_family = AF_UNSPEC;
-	hints.ai_socktype = SOCK_STREAM;
+//	memset(&hints, 0, sizeof hints); we don't need memset
 
 	if ((status = getaddrinfo("google.com", NULL, &hints, &res)) != 0) { // if we want we can use argv[1]
 		fprintf(stderr, "error while getting address info");
