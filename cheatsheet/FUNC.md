@@ -125,7 +125,7 @@ valid network address and -1 when it fails.
 
 ___
 
-## > getaddrinfo()
+## > getaddrinfo() | Server & Client
 
 This function helps to setup the structs we need.
 
@@ -155,7 +155,7 @@ struct addrinfo *results; // struct with results
 memset(&hints, 0, sizeof hints);
 hints.ai_family = AF_UNSPEC; // we don't care about IPv4 or IPv6
 hints.ai_socktype = SOCK_STREAM; // tcp
-hints.ai_flags = AF_PASSIVE; // use my ip
+hints.ai_flags = AI_PASSIVE; // use my ip
 
 if ((status = getaddrinfo(NULL, "3490", &hints, &servinfo)) != 0) {
 	fprintf(stderr, "getaddrinfo() error: %s\n", gai_strerror(status));
@@ -165,11 +165,11 @@ if ((status = getaddrinfo(NULL, "3490", &hints, &servinfo)) != 0) {
 freeaddrinfo(servinfo); // free the linked list
 ```
 
-We can use an hardcoded IP instead of NULL and we can avoid also the `AF_PASSIVE`;
+We can use an hardcoded IP instead of NULL and we can avoid also the `AI_PASSIVE`;
 
 ___
 
-### > inet_ntop()
+### > inet_ntop() | Server & Client
 
 This function converts a network address struct to a string.
 
@@ -201,7 +201,7 @@ The last byte is the string null terminator \0.
 
 ___
 
-## > socket()
+## > socket() | Server & Client
 
 This functions returns a socket descriptor (-1 on error).
 
@@ -234,7 +234,7 @@ sock = socket(res->ai_family, res->ai_socktype, res->ai_protocol);
 
 ___
 
-## > bind()
+## > bind() | Server
 
 This functions bind a socket on a port. Returns -1 on error.
 
@@ -270,4 +270,162 @@ if ((status = getaddrinfo(NULL, "3490", &hints, &res)) != 0) {
 sockfd = socket(res->ai_family, res->ai_socktype, res->ai_protocol);
 
 bind(sockfd, res->ai_addr, res->ai_addrlen);
+```
+
+___
+
+## > connect() | Client
+
+This function connects to a server.
+
+```
+#include <sys/types.h>
+#include <sys/socket.h>
+
+int connect(int sockfd,
+		struct sockaddr *serv_addr,
+		int addrlen);
+```
+
+`int sockfd` is the socket file descriptor made by `socket()`.  
+`struct sockaddr *serv_addr` is the struct that contains the destination port and ip.  
+`int addrlen` is the length in bytes of the server address structure.
+
+Example:
+
+```
+struct addrinfo hints = {
+	.ai_family = AF_UNSPEC,
+	.ai_socktype = SOCK_STREAM
+}, *res;
+int sockfd;
+
+getaddrinfo("server.com", "80", &hints, &res);
+sockfd = socket(res->ai_family, res->ai_socktype, res->ai_protocol);
+connect(sockfd, res->ai_addr, res->ai_addrlen);
+```
+
+___
+
+## > listen() | Server
+
+This function listens on a port for incoming connections. It returns -1 on error and we can use `errno` to know what error is.
+
+```
+int listen(int sockfd, int backlog);
+```
+
+`int sockfd` is the socket file descriptor.  
+`int backlog` is the number of connection allowed on the incoming queue.
+
+### Errno
+
+Example:
+
+```
+#include <string.h>
+#include <errno.h>
+
+if ((sockfd = socket(res->ai_family, res->ai_socktype, res->ai_protocol)) == -1) {
+	fprintf(stderr, "Error: %s", strerror(errno));
+	exit(1);
+}
+```
+
+### Server example steps
+
+```
+getaddrinfo();
+socket();
+bind();
+listen();
+accept();
+```
+
+___
+
+## > accept() | Server
+
+This function accepts an incoming connection. It returns a new socket file descriptor to use for this single connection. The original `sockfd` is still listening for more new connections and the `new_fd` is ready to `send()` and `recv()`. It returns -1 on error.
+
+```
+#include <sys/types.h>
+#include <sys/socket.h>
+
+int accept(int sockfd,
+		struct sockaddr *addr,
+		socklen_t *addrlen);
+```
+
+`int sockfd` is the socket file descriptor.  
+`struct sockaddr *addr` is a pointer to a `struct sockaddr_storage` that contains the incoming connection info.  
+`socklen_t *addrlen` is a variable set to `sizeof (struct sockaddr_storage)`.
+
+Example:
+
+```
+...
+getaddrinfo(NULL, MYPORT, &hints, &res);
+sockfd = socket(res->ai_family, res->ai_socktype, res->ai_protocol);
+bind(sockfd, res->ai_addr, res->ai_addrlen);
+listen(sockfd, BACKLOG);
+
+// now accept an incoming connection
+struct sockaddr_storage their_addr;
+int new_fd;
+socklen_t addr_size = sizeof their_addr;
+new_fd = accept(sockfd, (struct sockaddr *)&their_addr, &addr_size);
+```
+
+___
+
+## > send() | Server
+
+This function sends data to client. It returns -1 on error.
+
+```
+int send(int sockfd,
+	const void *msg,
+	int len,
+	int flags);
+```
+
+`int sockfd` is the socket file descriptor.  
+`const void *msg` is the message to send.  
+`int len` is the length of the message.  
+`int flags` just set to 0 (`man send()` for more info about flags).
+
+Example:
+
+```
+char *msg = "Hello!";
+int len = strlen(msg);
+int bytes_sent = send(new_fd, msg, len, 0);
+```
+
+___
+
+## > recv() | Client
+
+This function receives data from the server. It returns -1 on error.
+
+```
+int recv(int sockfd,
+	void *buf,
+	int len,
+	int flags);
+```
+
+`int sockfd` I don't want to write what this is.  
+`void *buf` this is the buffer, like a string.  
+`int len` is the buffer length.  
+`int flags` just set to 0.
+
+Example:
+
+```
+#define BUFFER 512
+char buf[BUFFER];
+int recv_bytes = recv(sockfd, buf, BUFFER - 1, 0);
+buf[recv_bytes] = '\0'; // null terminator
 ```
