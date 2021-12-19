@@ -379,7 +379,7 @@ new_fd = accept(sockfd, (struct sockaddr *)&their_addr, &addr_size);
 
 ___
 
-## > send() | Server
+## > send() | Server & Client
 
 This function sends data to client. It returns -1 on error.
 
@@ -405,7 +405,7 @@ int bytes_sent = send(new_fd, msg, len, 0);
 
 ___
 
-## > recv() | Client
+## > recv() | Client & Client
 
 This function receives data from the server. It returns -1 on error.
 
