@@ -7,7 +7,6 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-#include <string.h>
 
 int main(void) {
 	struct addrinfo hints = {	// our struct with needed informations
@@ -23,8 +22,6 @@ int main(void) {
 	// INET_ADDRSTRLEN is defined as 16 because it needs 15 bytes to represent an ipv4 address (255.255.255.255)
 	// INET6_ADDRSTRLEN is defined as 46 because with ipv4 tunneling the longest form can be 45 bytes (the standard is 39 bytes), for example: ffff:ffff:ffff:ffff:ffff:ffff:255.255.255.255
 	// the last byte is the string null terminator \0
-
-//	memset(&hints, 0, sizeof hints); we don't need memset
 
 	if ((status = getaddrinfo("google.com", NULL, &hints, &res)) != 0) { // if we want we can use argv[1]
 		fprintf(stderr, "error while getting address info");
