@@ -405,7 +405,7 @@ int bytes_sent = send(new_fd, msg, len, 0);
 
 ___
 
-## > recv() | Client & Client
+## > recv() | Server & Client
 
 This function receives data from the server. It returns -1 on error.
 

@@ -23,31 +23,26 @@ int main(void) {
 	
 	// steps:
 	// getaddrinfo()
-	// socket() //iterate
-	// bind() //iterate
+	// socket()
+	// bind()
 	// listen()
 	// accept()
 	
+	// here is useless to iterate with a for because it's only one server.
+	
 	if ((status = getaddrinfo(NULL, "3939", &hints, &res)) != 0) {
 		fprintf(stderr, "error on getaddrinfo()\n");
-		exit(1);
+		exit(EXIT_FAILURE);
 	}
 	
-	struct addrinfo *p;
-	
-	// loop through all the results and bind the first we can
-	for (p = res; p != NULL; p = p->ai_next) {
-		if ((sockfd = socket(p->ai_family, p->ai_socktype, p->ai_protocol)) == -1) {
-			fprintf(stderr, "error on socket(): %s\n", strerror(errno));
-			continue;
-		}
+	if ((sockfd = socket(res->ai_family, res->ai_socktype, res->ai_protocol)) == -1) {
+		fprintf(stderr, "error on socket(): %s\n", strerror(errno));
+		exit(EXIT_FAILURE);
+	}
 		
-		if (bind(sockfd, p->ai_addr, p->ai_addrlen) != 0) {
-			fprintf(stderr, "error on bind(): %s\n", strerror(errno));
-			continue;
-		}
-		
-		break;
+	if (bind(sockfd, res->ai_addr, res->ai_addrlen) != 0) {
+		fprintf(stderr, "error on bind(): %s\n", strerror(errno));
+		exit(EXIT_FAILURE);
 	}
 	
 	freeaddrinfo(res); // we don't need the results anymore

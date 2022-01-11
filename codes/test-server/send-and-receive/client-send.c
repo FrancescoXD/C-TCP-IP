@@ -24,22 +24,21 @@ int main(void) {
 		.ai_socktype = SOCK_STREAM,
 		.ai_flags = AI_PASSIVE
 	};
-	struct addrinfo *res, *p;
+	struct addrinfo *res;
 	
 	if ((status = getaddrinfo(NULL, "3939", &hints, &res)) != 0) {
-		exit(1);
+		fprintf(stderr, "error on bind(): %s\n", strerror(errno));
+		exit(EXIT_FAILURE);
 	}
 	
-	for (p = res; p != NULL; p = p->ai_next) {
-		if ((sockfd = socket(p->ai_family, p->ai_socktype, p->ai_protocol)) == -1) {
-			continue;
-		}
+	if ((sockfd = socket(res->ai_family, res->ai_socktype, res->ai_protocol)) == -1) {
+		fprintf(stderr, "error on bind(): %s\n", strerror(errno));
+		exit(EXIT_FAILURE);
+	}
 		
-		if (connect(sockfd, p->ai_addr, p->ai_addrlen) == -1) {
-			continue;
-		}
-		
-		break;
+	if (connect(sockfd, res->ai_addr, res->ai_addrlen) == -1) {
+		fprintf(stderr, "error on bind(): %s\n", strerror(errno));
+		exit(EXIT_FAILURE);
 	}
 	
 	char s[INET6_ADDRSTRLEN];
