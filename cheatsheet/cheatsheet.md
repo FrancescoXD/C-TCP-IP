@@ -6,6 +6,9 @@ See `functions.md` file.
 ## Structures
 See `structures.md` file.
 
+## Non-blocking
+See `nonblock.md` file.
+
 ___
 
 ## INET_ADDRSTRLEN and INET6_ADDRSTRLEN

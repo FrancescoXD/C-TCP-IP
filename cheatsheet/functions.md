@@ -87,14 +87,14 @@ This function converts a network address struct to a string.
 #include <arpa/inet.h>
 
 const char* inet_ntop(int af,
-			const void *src,
-			char *dst,
+			const void* src,
+			char* dst,
 			socklen_t size);
 ```
 
 `int af` is the family (AF_INET, AF_INET6) that we get from the struct.  
-`const void *src` is the network address structure.  
-`char *dst` is the destination where to write the ip.  
+`const void* src` is the network address structure.  
+`char* dst` is the destination where to write the ip.  
 `socklen_t size` is the sizeof the dst.
 
 ___
